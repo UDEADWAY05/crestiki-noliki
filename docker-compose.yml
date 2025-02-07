@@ -1,0 +1,14 @@
+services:
+  main-db:
+    image: postgres
+    ports:
+      - "5433:5433" # Порт должен быть строкой и иметь пробел после "-"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=postgres
+    volumes:
+      - main-db:/var/lib/postgres/data # Пробел после "-"
+
+volumes:
+  main-db: # Объявление тома на верхнем уровне
