@@ -2,7 +2,7 @@ services:
   main-db:
     image: postgres
     ports:
-      - "5433:5433" # Порт должен быть строкой и иметь пробел после "-"
+      - "5433:5432" # Порт должен быть строкой и иметь пробел после "-"
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
