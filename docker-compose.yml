@@ -9,6 +9,16 @@ services:
       - POSTGRES_DB=postgres
     volumes:
       - main-db:/var/lib/postgres/data # Пробел после "-"
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    restart: always
+    ports:
+      - "5672:5672" # AMQP-протокол (для подключения к RabbitMQ)
+      - "15672:15672" # Web UI для управления
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
 
 volumes:
   main-db: # Объявление тома на верхнем уровне

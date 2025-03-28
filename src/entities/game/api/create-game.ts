@@ -19,6 +19,7 @@ export const createGame = async (player: PlayerEntity, name: string) => {
         id: cuid(),
         name: name,
         creator: player,
+        field: Array(9).fill(null),
         status: 'idle'
     })
 

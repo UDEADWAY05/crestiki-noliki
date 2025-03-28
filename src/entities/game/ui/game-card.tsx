@@ -7,8 +7,9 @@ type Props = {
     name: string;
     login: string;
     rating: number;
+    actions?: React.ReactNode
 }
-export const GameCard = ({ name, login, rating, id }: Props) => {
+export const GameCard = ({ name, login, rating, id, actions }: Props) => {
     return (
         <Card>
             <CardHeader>
@@ -17,12 +18,13 @@ export const GameCard = ({ name, login, rating, id }: Props) => {
             </CardHeader>
 
             <CardContent>Рейтинг: {rating}</CardContent>
-            <CardFooter >
-                <Link href={`game/${id}`}>
-                    <Button >
+            <CardFooter className="gap-4">
+                <Button asChild >
+                    <Link href={`game/${id}`}>
                         Подробнее
-                    </Button>
-                </Link>
+                    </Link>
+                </Button>
+                {actions}
             </CardFooter>
         </Card>
     );

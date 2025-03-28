@@ -1,3 +1,5 @@
+import { Game } from "@/features/game/server";
+
 type Props = {
     params: Promise<{ id: string }>
 }
@@ -5,8 +7,8 @@ type Props = {
 export default async function Page({ params }: Props) {
     const { id } = await params
     return (
-        <div className="p-5">
-            game {id}
-        </div>
+        <main className="p-5 flex flex-col justify-center h-full w-full grow pt-24 max-w-[400px] mx-auto">
+            <Game gameId={id} />
+        </main>
     );
 }

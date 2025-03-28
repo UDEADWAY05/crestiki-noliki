@@ -6,6 +6,7 @@ export type GameIdleEntity = {
     id: GameId;
     name: string;
     creator: PlayerEntity;
+    field: Field
     status: "idle";
 }
 export type GameInProgressEntity = {
@@ -44,4 +45,9 @@ export type Field = Cell[]
 
 export type Cell = string | null
 
-export type GaneSymbol = string
+export type GameSymbol = string
+
+export const GameSymbol = {
+    X: "X",
+    O: "O"
+}

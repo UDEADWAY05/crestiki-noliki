@@ -93,3 +93,8 @@ export const signInAction = async (state: SignForm, formData: FormData): Promise
         }
     }
 }
+
+export const logOutAction = async () => {
+    sessionService.deleteSession();
+    redirect('/sign-in')
+}

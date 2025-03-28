@@ -1,11 +1,12 @@
 import { getIdleGames } from "@/entities/game/server";
 import { GameCard } from "@/entities/game/ui/game-card";
 import { CreateButton } from "./create-button";
+import { Button } from "@/shared/ui/button";
+import Link from "next/link";
 
 export const GameList = async () => {
     const games = await getIdleGames()
 
-    console.log(games)
     return (
         <div className="flex flex-col gap-4">
             <div className="flex flex-row justify-end gap-4">
@@ -21,6 +22,12 @@ export const GameList = async () => {
                             login={game.creator.login}
                             rating={game.creator.rating}
                             name={game.name}
+                            actions={<Button>
+                                <Link href={`/game/${game.id}`} >
+                                    Присоединится
+                                </Link>
+
+                            </Button>}
                         />
                     ))
                 }
