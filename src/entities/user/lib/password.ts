@@ -13,15 +13,7 @@ export async function hashPassword(password: string, salt = randomBytes(16).toSt
     }
 }
 
-export async function comparePassword({
-    password,
-    hash,
-    salt
-}: {
-    password: string;
-    hash: string;
-    salt: string;
-}) {
+export async function comparePassword({ password, hash, salt }: {password: string; hash: string; salt: string}) {
     return hash === (await hashPassword(password, salt)).hash
 }
 

@@ -1,6 +1,6 @@
+'use server'
+
 import { GameId } from "@/shared/types/ids";
-import { useGameLogic } from "../model/useGameLogic";
-import { GameLayout } from "./layout";
 import { GameClient } from "./game-client";
 import { getCurrentUser } from "@/entities/user/server";
 import { getGameById, startGame } from "@/entities/game/server";
@@ -13,7 +13,7 @@ export const Game = async ({ gameId }: Props) => {
     const user = await getCurrentUser()
     let game = await getGameById(gameId)
 
-    if (!game) {
+    if (!game || !user) {
         throw new Error('game-not-found')
     }
 
@@ -27,6 +27,6 @@ export const Game = async ({ gameId }: Props) => {
     }
 
     return (
-        <GameClient defaultGame={game} />
+        <GameClient defaultGame={game} player={user} />
     );
 }

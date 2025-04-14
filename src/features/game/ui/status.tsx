@@ -1,4 +1,5 @@
-import { getGameCurrentStep, getNextSybmol } from "@/entities/game";
+import { getGameCurrentSymbol } from "@/entities/game";
+import { getPlayerSymbol } from "@/entities/game/lib/game-logic";
 import { GameEntity } from "@/entities/game/model/types";
 
 type Props = {
@@ -9,14 +10,14 @@ export const GameStatus = ({ game }: Props) => {
         case "idle":
             return <div className="text-lg">Ожидание игрока</div>;
         case "inProgress": {
-            const currentSymbol = getGameCurrentStep(game)
+            const currentSymbol = getGameCurrentSymbol(game)
 
             return <div className="text-lg">Ход: {currentSymbol}</div>;
         }
 
         case "gameOver": {
-            const currentSymbol = getGameCurrentStep(game)
-            return <div className="text-lg">Победитель: {currentSymbol}</div>;
+            const currentSymbol = getPlayerSymbol(game.winner, game)
+            return <div className="text-xl font-bold">Победитель: {currentSymbol}</div>;
         }
         case "gameOverDraw":
             return <div className="text-lg">Ничья</div>;

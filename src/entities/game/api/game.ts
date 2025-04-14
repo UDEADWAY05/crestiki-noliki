@@ -48,6 +48,27 @@ async function startGame(gameId: GameId, player: PlayerEntity) {
     return dbGameToGameEntity(updateGame)
 }
 
+async function saveGame(game: GameInProgressEntity | GameOverDrawEntity | GameOverEntity) {
+    const winnerId = game.status === 'gameOver' ? await prisma.gamePlayer.findFirstOrThrow({
+        where: { userId: game.winner.id },
+    }).then((p) => p.id) : undefined
+
+    const updateGame = await prisma.game.update({
+        where: {
+            id: game.id
+        },
+        data: {
+            status: game.status,
+            field: game.field,
+            winnerId: winnerId
+        },
+        include: gameInclude
+    })
+
+    return dbGameToGameEntity(updateGame)
+}
+
+
 async function getGame(where?: Prisma.GameWhereInput) {
     const game = await prisma.game.findFirst({
         where,
@@ -149,5 +170,6 @@ export const gameRepository = {
     gamesList,
     createGame,
     getGame,
-    startGame
+    startGame,
+    saveGame
 }

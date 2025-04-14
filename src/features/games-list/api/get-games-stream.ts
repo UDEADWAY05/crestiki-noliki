@@ -2,17 +2,14 @@ import { getGameById, surrenderGame } from "@/entities/game/server";
 import { sseStream } from "@/shared/lib/sse/server";
 import { GameId } from "@/shared/types/ids";
 import { NextRequest } from "next/server";
-import { gameEvents } from "./game-events";
+import { gameEvents } from "@/features/game/api/game-events";
 import { getCurrentUser } from "@/entities/user/server";
 
-export async function getGameStream(req: NextRequest, { params }: { params: Promise<{ id: GameId }> }) {
-    const { id } = await params;
+export async function getGameStream(req: NextRequest) {
 
     const user = await getCurrentUser()
 
-    const game = await getGameById(id)
-
-    if (!game || !user) {
+    if (!user) {
         return new Response("Game not found", {
             status: 404,
         })
@@ -22,7 +19,7 @@ export async function getGameStream(req: NextRequest, { params }: { params: Prom
 
     write(game);
 
-    const unwatch = await gameEvents.addListener(game.id, (event) => {
+    const unwatch = await gameEvents.addGamesListener((event) => {
         write(event.data)
     })
 

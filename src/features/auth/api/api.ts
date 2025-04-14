@@ -2,7 +2,6 @@
 
 import { verifyUserPassword } from "@/entities/user/api/verify-user-password"
 import { createUser } from "@/entities/user/server"
-import { left, mapLeft } from "@/shared/lib/either"
 import { sessionService } from "@/shared/lib/session"
 import { redirect } from "next/navigation"
 import { z } from "zod"
@@ -42,7 +41,6 @@ export const signUpAction = async (state: SignForm, formData: FormData): Promise
 
     if (createUserResult.type === 'right') {
         await sessionService.addSession(createUserResult.value)
-
         redirect('/')
     }
 

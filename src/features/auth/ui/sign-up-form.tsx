@@ -21,9 +21,7 @@ export const SignUpForm = () => {
                 <CardContent className="flex flex-col gap-4" >
                     <ErrorMessage error={formState.errors?._errors} />
                     <form action={action}>
-                        <AuthForm
-                            {...formState}
-                        />
+                        <AuthForm {...formState} />
                         <Button className="w-full">Зарегистрироваться</Button>
                     </form>
                 </CardContent>
