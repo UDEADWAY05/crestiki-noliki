@@ -1,10 +1,7 @@
 import { Button } from "@/shared/ui/button";
 import { logOutAction } from "../api/api";
 
-type Props = {
-
-}
-export const LogOutButton = ({ }: Props) => {
+export const LogOutButton = () => {
     return (
         <form action={logOutAction}>
             <Button type="submit">

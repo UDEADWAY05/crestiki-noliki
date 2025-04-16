@@ -4,7 +4,6 @@ import { GameId } from "@/shared/types/ids";
 import { GameClient } from "./game-client";
 import { getCurrentUser } from "@/entities/user/server";
 import { getGameById, startGame } from "@/entities/game/server";
-import { gameEvents } from "../api/game-events";
 
 type Props = {
     gameId: GameId;
@@ -22,7 +21,6 @@ export const Game = async ({ gameId }: Props) => {
 
         if (startGameResult?.type === 'right') {
             game = startGameResult.value;
-            gameEvents.emit(startGameResult.value);
         }
     }
 

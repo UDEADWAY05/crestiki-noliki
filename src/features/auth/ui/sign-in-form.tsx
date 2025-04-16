@@ -23,7 +23,7 @@ export const SignInForm = () => {
                         <AuthForm
                             {...formState}
                         />
-                        <Button className="w-full" >Войти</Button>
+                        <Button className="w-full" disabled={isPending} >Войти</Button>
                     </form>
                 </CardContent>
                 <CardFooter className="flex justify-center items-center">

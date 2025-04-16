@@ -7,9 +7,9 @@ import { GamePlayers } from "./players";
 import { GameField } from "./field";
 import { GameStatus } from "./status";
 
-export const GameClient = ({ defaultGame, player }: { defaultGame: GameEntity, player: PlayerEntity }) => {
+export const GameClient = ({ defaultGame }: { defaultGame: GameEntity }) => {
 
-    const { data = defaultGame, step } = useGameLogic(defaultGame.id, player)
+    const { data = defaultGame, step } = useGameLogic(defaultGame.id)
 
     return (
         <GameLayout

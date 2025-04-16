@@ -1,0 +1,42 @@
+
+import { EventsChanel } from "@/shared/lib/events";
+import { GameEntity } from "../model/types";
+import { GameId } from "@/shared/types/ids";
+
+type GameChanged = {
+    type: "game-changed";
+    data: GameEntity;
+};
+type GameCreated = {
+    type: "game-created";
+};
+type GameEvent = GameChanged | GameCreated;
+
+class GameEventsService {
+    eventsChanel = new EventsChanel("game");
+    async addGameChangedListener(
+        gameId: GameId,
+        listener: (event: GameChanged) => void,
+    ) {
+        return this.eventsChanel.consume(gameId, (data) => {
+            listener(data as GameChanged);
+        });
+    }
+    async addGameCreatedListener(listener: (event: GameCreated) => void) {
+        return this.eventsChanel.consume(`game-created`, (data) => {
+            listener(data as GameCreated);
+        });
+    }
+
+    emit(event: GameEvent) {
+        if (event.type === "game-changed") {
+            return this.eventsChanel.emit(event.data.id, event);
+        }
+
+        if (event.type === "game-created") {
+            return this.eventsChanel.emit("game-created", event);
+        }
+    }
+}
+
+export const gameEvents = new GameEventsService();

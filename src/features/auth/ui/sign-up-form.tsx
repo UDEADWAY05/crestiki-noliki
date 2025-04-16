@@ -22,7 +22,7 @@ export const SignUpForm = () => {
                     <ErrorMessage error={formState.errors?._errors} />
                     <form action={action}>
                         <AuthForm {...formState} />
-                        <Button className="w-full">Зарегистрироваться</Button>
+                        <Button className="w-full" disabled={isPending}>Зарегистрироваться</Button>
                     </form>
                 </CardContent>
                 <CardFooter className="flex justify-center items-center">

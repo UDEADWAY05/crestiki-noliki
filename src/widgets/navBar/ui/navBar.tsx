@@ -1,4 +1,3 @@
-import { getCurrentUser } from "@/entities/user/server";
 import { LogOutButton } from "@/features/auth/ui/logout-button";
 import { sessionService } from "@/shared/lib/session";
 import { Button } from "@/shared/ui/button";

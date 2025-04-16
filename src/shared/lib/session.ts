@@ -33,7 +33,7 @@ async function decrypt(session: string | undefined = '') {
             expiredAt: payload.expiredAt
         }
         return right(data as SessionEntity)
-    } catch (error) {
+    } catch (_) {
         return left('Failed to verify session')
     }
 }

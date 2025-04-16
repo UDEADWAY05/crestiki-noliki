@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 
-export function useEventsSource<T>(url: string, def: T) {
+export function useEventsSource<T>(url: string, onData?: (data: T) => void) {
     const [isPending, setIsPending] = useState(true)
-    const [data, setData] = useState<T>(def)
+    const [data, setData] = useState<T>()
     const [error, setError] = useState<unknown | undefined>()
 
     useEffect(() => {
@@ -10,9 +10,11 @@ export function useEventsSource<T>(url: string, def: T) {
 
         gameEvents.addEventListener('message', (message) => {
             try {
-                setIsPending(false)
+                const data = JSON.parse(message.data)
                 setError(undefined)
-                setData(JSON.parse(message.data))
+                setData(data)
+                onData?.(data)
+                setIsPending(false)
             } catch (error) {
                 setError(error)
             }
@@ -23,7 +25,7 @@ export function useEventsSource<T>(url: string, def: T) {
         })
 
         return () => gameEvents.close()
-    }, [url])
+    }, [url, onData])
 
     return {
         data,

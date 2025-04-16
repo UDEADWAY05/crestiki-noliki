@@ -1,7 +1,8 @@
 import cuid from "cuid";
-import { GameIdleEntity, PlayerEntity } from "../model/types";
+import { PlayerEntity } from "../model/types";
 import { gameRepository } from "./game";
 import { left, right } from "@/shared/lib/either";
+import { gameEvents } from "../server";
 
 export const createGame = async (player: PlayerEntity, name: string) => {
     const playerGames = await gameRepository.gamesList({
@@ -19,11 +20,15 @@ export const createGame = async (player: PlayerEntity, name: string) => {
         id: cuid(),
         name: name,
         creator: player,
+        status: "idle",
         field: Array(9).fill(null),
-        status: 'idle'
-    })
+    });
 
-    return right(createdGame as GameIdleEntity)
+    await gameEvents.emit({
+        type: "game-created",
+    });
+
+    return right(createdGame);
 };
 
 //1:43.46

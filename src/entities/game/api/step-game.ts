@@ -3,6 +3,7 @@ import { PlayerEntity } from "../model/types";
 import { gameRepository } from "./game";
 import { left, right } from "@/shared/lib/either";
 import { doStep } from "../lib/game-logic";
+import { gameEvents } from "../server";
 
 export async function stepGame(gameId: GameId, player: PlayerEntity, index: number) {
     const game = await gameRepository.getGame({ id: gameId })
@@ -21,9 +22,16 @@ export async function stepGame(gameId: GameId, player: PlayerEntity, index: numb
 
     const stepResult = doStep({ game, index, player })
 
-    if (stepResult?.type === 'left') {
+    if (stepResult.type === 'left') {
         return stepResult;
     }
 
-    return right(await gameRepository.saveGame(stepResult.value))
+    const newGame = await gameRepository.saveGame(stepResult.value)
+
+    await gameEvents.emit({
+        type: 'game-changed',
+        data: newGame
+    })
+
+    return right(newGame)
 }

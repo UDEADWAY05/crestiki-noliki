@@ -6,11 +6,9 @@ import { matchEither, right } from "@/shared/lib/either";
 import { useActionState } from "@/shared/lib/react";
 import { startTransition } from "react";
 
-type Props = {
-}
-export const CreateButton = ({ }: Props) => {
-    const [data, dispatch, isPending] = useActionState(CreateGameAction, right(null))
 
+export const CreateButton = () => {
+    const [data, dispatch, isPending] = useActionState(CreateGameAction, right(null))
 
     return (
         <div>

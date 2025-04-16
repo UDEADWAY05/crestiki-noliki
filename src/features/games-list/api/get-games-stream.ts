@@ -1,40 +1,37 @@
-import { getGameById, surrenderGame } from "@/entities/game/server";
+import { getIdleGames } from "@/entities/game/server";
 import { sseStream } from "@/shared/lib/sse/server";
-import { GameId } from "@/shared/types/ids";
+
 import { NextRequest } from "next/server";
-import { gameEvents } from "@/features/game/api/game-events";
+import { gameEvents } from "@/entities/game/api/game-events";
 import { getCurrentUser } from "@/entities/user/server";
 
-export async function getGameStream(req: NextRequest) {
-
-    const user = await getCurrentUser()
+export async function getGamesStreamRoute(req: NextRequest) {
+    const user = await getCurrentUser();
 
     if (!user) {
         return new Response("Game not found", {
             status: 404,
-        })
+        });
     }
 
-    const { addCloseListener, response, write } = sseStream(req);
+    const { addCloseListener, response, write, close } = sseStream(req);
 
-    write(game);
+    // Сразу отправляем список игр
+    write(await getIdleGames());
 
-    const unwatch = await gameEvents.addGamesListener((event) => {
-        write(event.data)
-    })
+    // Подписка на событие создания игры
+    const cancelGameCreated = await gameEvents.addGameCreatedListener(async () => {
+        write(await getIdleGames());
+    });
 
-    addCloseListener(async () => {
-        unwatch()
-
-        const result = await surrenderGame(game.id, user)
-
-        if (result.type === 'right') {
-            gameEvents.emit(result.value)
-        }
-    })
-
+    // Очищаем при отключении клиента
+    addCloseListener(() => {
+        cancelGameCreated(); // отписка от RabbitMQ
+        close(); // закрыть поток
+    });
 
     return response;
 }
+
 
 //6.34.46

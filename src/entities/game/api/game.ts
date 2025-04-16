@@ -1,8 +1,11 @@
-import { Game, GamePlayer, GameStatus, Prisma, User } from "@prisma/client";
+import { Game, GamePlayer, Prisma, User } from "@prisma/client";
 import { GameEntity, GameIdleEntity, GameInProgressEntity, GameOverDrawEntity, GameOverEntity, PlayerEntity } from "../model/types";
 import { prisma } from "@/shared/lib/db";
 import { z } from 'zod'
 import { GameId } from "@/shared/types/ids";
+
+
+const fieldSchema = z.array(z.union([z.string(), z.null()]))
 
 const gameInclude = {
     winner: {
@@ -16,8 +19,6 @@ const gameInclude = {
         }
     },
 }
-
-const fieldSchema = z.array(z.union([z.string(), z.null()]))
 
 async function gamesList(where?: Prisma.GameWhereInput) {
     const games = await prisma.game.findMany({

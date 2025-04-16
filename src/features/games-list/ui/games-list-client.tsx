@@ -5,7 +5,7 @@ import { CreateButton } from "./create-button";
 import { Button } from "@/shared/ui/button";
 import Link from "next/link";
 import { GameIdleEntity } from "@/entities/game/model/types";
-import { useGamesListLogic } from "../model/useGamesListLogic";
+import { useEventsSource } from "@/shared/lib/sse/client";
 
 
 interface Props {
@@ -13,7 +13,7 @@ interface Props {
 }
 
 export const GameListClient = ({ games }: Props) => {
-    const { gamesStream } = useGamesListLogic(games)
+    const { data = games } = useEventsSource<GameIdleEntity[]>('/games/stream')
 
     return (
         <div className="flex flex-col gap-4">
@@ -21,9 +21,8 @@ export const GameListClient = ({ games }: Props) => {
                 <CreateButton />
             </div>
             <div className="grid grid-cols-2 gap-4">
-
                 {
-                    games.map((game) => (
+                    data.map((game) => (
                         <GameCard
                             key={game.id}
                             id={game.id}

@@ -4,7 +4,6 @@ import { stepGame } from "@/entities/game/server";
 import { getCurrentUser } from "@/entities/user/server";
 import { left } from "@/shared/lib/either";
 import { GameId } from "@/shared/types/ids";
-import { gameEvents } from "./game-events";
 
 export const gameStepAction = async ({ index, gameId }: { index: number, gameId: GameId }) => {
     const currentUser = await getCurrentUser();
@@ -13,13 +12,5 @@ export const gameStepAction = async ({ index, gameId }: { index: number, gameId:
         return left('not-found')
     }
 
-    const result = await stepGame(gameId, currentUser, index)
-
-    if (result.type === 'right') {
-        gameEvents.emit(result.value);
-
-        return result;
-    }
-
-    return result;
+    return await stepGame(gameId, currentUser, index)
 }

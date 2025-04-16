@@ -4,7 +4,6 @@ type Props = {
     game: GameEntity;
 }
 export const GamePlayers = ({ game }: Props) => {
-
     const firstPlayer = game.status === 'idle' ? game.creator : game.players[0]
     const secondPlayer = game.status === 'idle' ? undefined : game.players[1]
 
