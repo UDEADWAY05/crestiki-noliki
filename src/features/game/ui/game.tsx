@@ -1,0 +1,30 @@
+'use server'
+
+import { GameId } from "@/shared/types/ids";
+import { GameClient } from "./game-client";
+import { getCurrentUser } from "@/entities/user/server";
+import { getGameById, startGame } from "@/entities/game/server";
+
+type Props = {
+    gameId: GameId;
+}
+export const Game = async ({ gameId }: Props) => {
+    const user = await getCurrentUser()
+    let game = await getGameById(gameId)
+
+    if (!game || !user) {
+        throw new Error('game-not-found')
+    }
+
+    if (user) {
+        const startGameResult = await startGame(gameId, user)
+
+        if (startGameResult?.type === 'right') {
+            game = startGameResult.value;
+        }
+    }
+
+    return (
+        <GameClient defaultGame={game} player={user} />
+    );
+}
